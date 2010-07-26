@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Binding.cs" />
+    <Compile Include="Environment.cs" />
     <Compile Include="Evaluator.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="Program.cs" />
