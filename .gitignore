@@ -1,0 +1,4 @@
+*.suo
+*.user
+ls/bin
+ls/obj
