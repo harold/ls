@@ -88,6 +88,23 @@ namespace ls
         }
     }
 
+    public class MetaCommentReader : IMetaReader
+    {
+        public object Read(StringReader inStream)
+        {
+            inStream.Read(); // consume semi-colon
+            while (true)
+            {
+                int theChar = inStream.Peek();
+                if (theChar == -1 || (char)theChar == '\r' || (char)theChar == '\n')
+                    break;
+
+                inStream.Read(); // Discard
+            }
+            return null;
+        }
+    }
+
     public class Reader
     {
         static IMetaReader[] MetaReaders = new IMetaReader[256];
@@ -97,6 +114,7 @@ namespace ls
             MetaReaders['('] = new MetaListReader();
             MetaReaders['{'] = new MetaMapReader();
             MetaReaders['\''] = new MetaQuoteReader();
+            MetaReaders[';'] = new MetaCommentReader();
         }
         
         public static object ReadNumber(StringReader inStream)
