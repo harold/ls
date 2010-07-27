@@ -91,6 +91,8 @@ namespace ls
                     // Make sure to only copy over the arguments that were supplied
                     if (i < inArgs.Count)
                         theExtendedEnvironment[((Symbol)theNamedArguments[i]).Name] = inArgs[i];
+                    else
+                        theExtendedEnvironment[((Symbol)theNamedArguments[i]).Name] = null;
                 }
                 return Eval(theList[2], theExtendedEnvironment);
             }
