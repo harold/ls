@@ -49,7 +49,9 @@ namespace ls
 
         static object PrintIntrinsic(ArrayList inList, Environment inEnvironment)
         {
-            Printer.Print(inList);
+            foreach(object theForm in inList)
+                Printer.Print(theForm);
+
             return null;
         }
 
