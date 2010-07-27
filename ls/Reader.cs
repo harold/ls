@@ -39,7 +39,7 @@ namespace ls
             while (true)
             {
                 int theChar = inStream.Peek();
-                if ((char)theChar == ')' || theChar == -1)
+                if ((char)theChar == ')' || theChar == -1) // TODO: There are bugs here, what if some wacky '}' is afoot?
                     break;
 
                 theList.Add(Reader.Read(inStream));
@@ -50,6 +50,29 @@ namespace ls
             inStream.Read(); // consume trailing paren
 
             return theList;
+        }
+    }
+
+    public class MetaMapReader : IMetaReader
+    {
+        public object Read(StringReader inStream)
+        {
+            inStream.Read(); // consume leading curly
+            Hashtable theMap = new Hashtable();
+            while (true)
+            {
+                int theChar = inStream.Peek();
+                if ((char)theChar == '}' || theChar == -1) // TODO: There are bugs here, what if some wacky ')' is afoot?
+                    break;
+
+                theMap.Add(Reader.Read(inStream), Reader.Read(inStream));
+
+                while (char.IsWhiteSpace((char)inStream.Peek()))
+                    inStream.Read();
+            }
+            inStream.Read(); // consume trailing curly
+
+            return theMap;
         }
     }
 
@@ -72,6 +95,7 @@ namespace ls
         {
             MetaReaders['"'] = new MetaStringReader();
             MetaReaders['('] = new MetaListReader();
+            MetaReaders['{'] = new MetaMapReader();
             MetaReaders['\''] = new MetaQuoteReader();
         }
         
@@ -81,7 +105,7 @@ namespace ls
             while (true)
             {
                 int theChar = inStream.Peek();
-                if (char.IsWhiteSpace((char)theChar) || theChar == -1 || (char)theChar == ')')
+                if (char.IsWhiteSpace((char)theChar) || theChar == -1 || (char)theChar == ')' || (char)theChar == '}')
                     break;
 
                 theStringBuilder.Append((char)inStream.Read());
@@ -97,7 +121,7 @@ namespace ls
             while (true)
             {
                 int theChar = inStream.Peek();
-                if (char.IsWhiteSpace((char)theChar) || theChar == -1 || (char)theChar == ')')
+                if (char.IsWhiteSpace((char)theChar) || theChar == -1 || (char)theChar == ')' || (char)theChar == '}')
                     break;
 
                 theStringBuilder.Append((char)inStream.Read());

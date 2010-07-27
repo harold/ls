@@ -40,6 +40,24 @@ namespace ls
                 Console.Write(")");
             }
 
+            else if (inForm is Hashtable)
+            {
+                Hashtable theMap = (Hashtable)inForm;
+                Console.Write("{");
+                int i = 0;
+                foreach (DictionaryEntry theEntry in theMap)
+                {
+                    Print(theEntry.Key);
+                    Console.Write(" ");
+                    Print(theEntry.Value);
+                    if (i != theMap.Count - 1)
+                        Console.Write(" ");
+
+                    ++i;
+                }
+                Console.Write("}");
+            }
+
             else if (inForm == null)
                 Console.Write("null");
 

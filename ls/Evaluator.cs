@@ -73,6 +73,9 @@ namespace ls
 
         private static object Apply(object inForm, ArrayList inArgs, Environment inEnvironment)
         {
+            if (inForm is Hashtable)
+                return ((Hashtable)inForm)[inArgs[0]];
+
             if (inForm is MetaFunction)
                 return ((MetaFunction)inForm)(inArgs, inEnvironment);
 
