@@ -88,7 +88,9 @@ namespace ls
                 ArrayList theNamedArguments = (ArrayList)theList[1];
                 for (int i = 0; i < theNamedArguments.Count; ++i)
                 {
-                    theExtendedEnvironment[((Symbol)theNamedArguments[i]).Name] = inArgs[i];
+                    // Make sure to only copy over the arguments that were supplied
+                    if (i < inArgs.Count)
+                        theExtendedEnvironment[((Symbol)theNamedArguments[i]).Name] = inArgs[i];
                 }
                 return Eval(theList[2], theExtendedEnvironment);
             }

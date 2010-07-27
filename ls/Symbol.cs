@@ -10,5 +10,10 @@ namespace ls
         {
             Name = inName;
         }
+
+        public override string ToString()
+        {
+            return "Symbol:" + Name;
+        }
     }
 }
