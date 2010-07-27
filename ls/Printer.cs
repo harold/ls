@@ -40,6 +40,9 @@ namespace ls
                 Console.Write(")");
             }
 
+            else if (inForm == null)
+                Console.Write("null");
+
             else
                 Console.Write(inForm);
         }

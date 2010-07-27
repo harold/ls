@@ -79,12 +79,15 @@ namespace ls
             ArrayList theList = (ArrayList)inForm;
             if (IsTaggedList(theList, "procedure"))
             {
+                Environment theExtendedEnvironment = new Environment();
+                theExtendedEnvironment.Extend(inEnvironment);
+
                 ArrayList theNamedArguments = (ArrayList)theList[1];
                 for (int i = 0; i < theNamedArguments.Count; ++i)
                 {
-                    inEnvironment[((Symbol)theNamedArguments[i]).Name] = inArgs[i];
+                    theExtendedEnvironment[((Symbol)theNamedArguments[i]).Name] = inArgs[i];
                 }
-                return Eval(theList[2], inEnvironment);
+                return Eval(theList[2], theExtendedEnvironment);
             }
 
             // else?
