@@ -14,7 +14,7 @@ namespace ls
 
         public static object Eval(object inForm, Environment inEnvironment)
         {
-            if (inForm is int || inForm is string)
+            if (inForm is int || inForm is string || inForm is double)
                 return inForm;
 
             if (inForm is Symbol)

@@ -321,12 +321,26 @@ namespace ls
 
         static object PlusIntrinsic(ArrayList inList, Environment inEnvironment)
         {
-            return (int)inList[0] + (int)inList[1];
+            object theLeft = inList[0];
+            object theRight = inList[1];
+            if (theLeft == null && theRight == null) return "null add fail";
+            if (theLeft is int && theRight is int) return (int)theLeft + (int)theRight;
+            if (theLeft is int && theRight is double) return Convert.ToDouble(theLeft) + (double)theRight;
+            if (theLeft is double && theRight is int) return (double)theLeft + Convert.ToDouble(theRight);
+            if (theLeft is double && theRight is double) return (double)theLeft + (double)theRight;
+            return String.Format("Unspported math operation: {0}+{1}", theLeft.GetType(), theRight.GetType());
         }
 
         static object StarIntrinsic(ArrayList inList, Environment inEnvironment)
         {
-            return (int)inList[0] * (int)inList[1];
+            object theLeft = inList[0];
+            object theRight = inList[1];
+            if (theLeft == null && theRight == null) return "null mult fail";
+            if (theLeft is int && theRight is int) return (int)theLeft * (int)theRight;
+            if (theLeft is int && theRight is double) return Convert.ToDouble(theLeft) * (double)theRight;
+            if (theLeft is double && theRight is int) return (double)theLeft * Convert.ToDouble(theRight);
+            if (theLeft is double && theRight is double) return (double)theLeft * (double)theRight;
+            return String.Format("Unspported math operation: {0}*{1}", theLeft.GetType(), theRight.GetType());
         }
 
         static object EqualsIntrinsic(ArrayList inList, Environment inEnvironment)
