@@ -129,8 +129,12 @@ namespace ls
                 theStringBuilder.Append((char)inStream.Read());
             }
 
-            // TODO: Decide what type of number, and use the apropriate parser. Also something like "123a" could be an error.
-            return int.Parse(theStringBuilder.ToString());
+            string theString = theStringBuilder.ToString();
+            if (theString.Contains(".")) // TODO: Something much more sophisticated here.
+                return double.Parse(theString);
+            else
+                return int.Parse(theString);
+
         }
 
         public static object ReadSymbol(StringReader inStream)
