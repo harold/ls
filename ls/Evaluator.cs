@@ -57,6 +57,15 @@ namespace ls
                 return theList;
             }
 
+            if (IsTaggedList(inForm, "begin"))
+            {
+                ArrayList theList = (ArrayList)inForm;
+                object theReturn = null;
+                for (int i = 1; i < theList.Count; ++i)
+                    theReturn = Eval(theList[i], inEnvironment);
+                return theReturn;
+            }
+
             if (inForm is ArrayList)
             {
                 ArrayList theList = (ArrayList)inForm;
