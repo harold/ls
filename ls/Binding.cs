@@ -25,7 +25,9 @@ namespace ls
             inEnvironment["print"] = new MetaFunction(PrintIntrinsic);
 
             inEnvironment["+"] = new MetaFunction(PlusIntrinsic);
+            inEnvironment["-"] = new MetaFunction(DashIntrinsic);
             inEnvironment["*"] = new MetaFunction(StarIntrinsic);
+            inEnvironment["/"] = new MetaFunction(SlashIntrinsic);
             inEnvironment["="] = new MetaFunction(EqualsIntrinsic);
         }
 
@@ -331,6 +333,18 @@ namespace ls
             return String.Format("Unspported math operation: {0}+{1}", theLeft.GetType(), theRight.GetType());
         }
 
+        static object DashIntrinsic(ArrayList inList, Environment inEnvironment)
+        {
+            object theLeft = inList[0];
+            object theRight = inList[1];
+            if (theLeft == null && theRight == null) return "null subtraction fail";
+            if (theLeft is int && theRight is int) return (int)theLeft - (int)theRight;
+            if (theLeft is int && theRight is double) return Convert.ToDouble(theLeft) - (double)theRight;
+            if (theLeft is double && theRight is int) return (double)theLeft - Convert.ToDouble(theRight);
+            if (theLeft is double && theRight is double) return (double)theLeft - (double)theRight;
+            return String.Format("Unspported math operation: {0}-{1}", theLeft.GetType(), theRight.GetType());
+        }
+
         static object StarIntrinsic(ArrayList inList, Environment inEnvironment)
         {
             object theLeft = inList[0];
@@ -341,6 +355,18 @@ namespace ls
             if (theLeft is double && theRight is int) return (double)theLeft * Convert.ToDouble(theRight);
             if (theLeft is double && theRight is double) return (double)theLeft * (double)theRight;
             return String.Format("Unspported math operation: {0}*{1}", theLeft.GetType(), theRight.GetType());
+        }
+
+        static object SlashIntrinsic(ArrayList inList, Environment inEnvironment)
+        {
+            object theLeft = inList[0];
+            object theRight = inList[1];
+            if (theLeft == null && theRight == null) return "null divide fail";
+            if (theLeft is int && theRight is int) return (int)theLeft / (int)theRight;
+            if (theLeft is int && theRight is double) return Convert.ToDouble(theLeft) / (double)theRight;
+            if (theLeft is double && theRight is int) return (double)theLeft / Convert.ToDouble(theRight);
+            if (theLeft is double && theRight is double) return (double)theLeft / (double)theRight;
+            return String.Format("Unspported math operation: {0}/{1}", theLeft.GetType(), theRight.GetType());
         }
 
         static object EqualsIntrinsic(ArrayList inList, Environment inEnvironment)
