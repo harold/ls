@@ -26,7 +26,14 @@ namespace ls
             while (true)
             {
                 Console.Write("> ");
-                Printer.Print(Evaluator.Eval(Reader.Read(Console.ReadLine()), Environment.Global));
+                try
+                {
+                    Printer.Print(Evaluator.Eval(Reader.Read(Console.ReadLine()), Environment.Global));
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine("Oops: " + e.ToString());
+                }
                 Console.Write("\n\n");
             }
         }

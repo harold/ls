@@ -9,7 +9,7 @@ namespace ls
     {
         public static bool IsTaggedList(object inForm, string inTag)
         {
-            return inForm is ArrayList && ((ArrayList)inForm)[0] is Symbol && (((Symbol)((ArrayList)inForm)[0])).Name == inTag;
+            return inForm is ArrayList && ((ArrayList)inForm).Count > 0 && ((ArrayList)inForm)[0] is Symbol && (((Symbol)((ArrayList)inForm)[0])).Name == inTag;
         }
 
         public static object Eval(object inForm, Environment inEnvironment)
@@ -65,6 +65,7 @@ namespace ls
                 {
                     theArgs.Add(Eval(theList[i], inEnvironment));
                 }
+                if (theList.Count == 0) throw new Exception("You can't call the empty list");
                 return Apply(Eval(theList[0], inEnvironment), theArgs, inEnvironment);
             }
 
@@ -79,9 +80,9 @@ namespace ls
             if (inForm is MetaFunction)
                 return ((MetaFunction)inForm)(inArgs, inEnvironment);
 
-            ArrayList theList = (ArrayList)inForm;
-            if (IsTaggedList(theList, "procedure"))
+            if (IsTaggedList(inForm, "procedure"))
             {
+                ArrayList theList = (ArrayList)inForm;
                 Environment theExtendedEnvironment = new Environment();
                 theExtendedEnvironment.Extend(inEnvironment);
 
