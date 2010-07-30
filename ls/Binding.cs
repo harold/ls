@@ -70,8 +70,11 @@ namespace ls
             }
 
             Type theType = SeriouslyGetType((Symbol)inList[0]);
-            ConstructorInfo constructor = theType.GetConstructor(Type.GetTypeArray(theArgs.ToArray()));
 
+            if (theType.IsValueType)
+                return Activator.CreateInstance(theType);
+
+            ConstructorInfo constructor = theType.GetConstructor(Type.GetTypeArray(theArgs.ToArray()));
             return constructor.Invoke(theArgs.ToArray());
         }
 
