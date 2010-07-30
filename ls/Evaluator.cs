@@ -25,7 +25,7 @@ namespace ls
 
             if (IsTaggedList(inForm, "define"))
             {
-                inEnvironment[((Symbol)((ArrayList)inForm)[1]).Name] = Eval(((ArrayList)inForm)[2], inEnvironment);
+                Environment.Global[((Symbol)((ArrayList)inForm)[1]).Name] = Eval(((ArrayList)inForm)[2], inEnvironment);
                 return new Symbol("ok");
             }
 

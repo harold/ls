@@ -3,9 +3,31 @@ using System.Collections;
 
 namespace ls
 {
-    public class Environment : Hashtable
+    public class Environment
     {
         public static Environment Global { get; set; }
+
+        protected Hashtable mFrame = new Hashtable();
+        protected Environment mParent;
+
+        public object this[object inKey]
+        {
+            get
+            {
+                object theReturn = mFrame[inKey];
+                if (theReturn == null && mParent != null)
+                    return mParent[inKey];
+
+                return theReturn; // Bottoming out
+            }
+
+            set
+            {
+                mFrame[inKey] = value;
+            }
+        }
+
+        public ICollection Keys { get{ return mFrame.Keys; } }
 
         public Environment()
         {
@@ -20,10 +42,8 @@ namespace ls
         }
 
         public void Extend(Environment inEnvironment)
-        { // An optimization here would be not to do a full copy.
-            foreach (DictionaryEntry theEntry in inEnvironment)
-                if (!(theEntry.Key is string) || ((string)theEntry.Key) != "*env*")
-                    this[theEntry.Key] = theEntry.Value;
+        {
+            mParent = inEnvironment;
         }
     }
 }
