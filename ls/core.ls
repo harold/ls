@@ -23,3 +23,24 @@
     (begin
       (eval expr)
       (dotimes (- i 1) expr)))))
+
+;; Sqrt (with apologies to Abelson, Sussman, et. al.)
+(define sqrt-iter (fn (guess x)
+  (if (good-enough? guess x)
+      guess
+      (sqrt-iter (improve guess x) x))))
+
+(define improve (fn (guess x)
+  (average guess (/ x guess))))
+
+(define average (fn (x y)
+  (/ (+ x y) 2.0)))
+
+(define square (fn (x) (* x x)))
+
+(define abs (fn (x) (if (< x 0) (- 0 x) x)))
+
+(define good-enough? (fn (guess x)
+  (< (abs (- (square guess) x)) 0.001)))
+
+(define sqrt (fn (x) (sqrt-iter 1.0 x)))
