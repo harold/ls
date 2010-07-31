@@ -88,6 +88,30 @@ namespace ls
         }
     }
 
+    public class MetaBackQuoteReader : IMetaReader
+    {
+        public object Read(StringReader inStream)
+        {
+            inStream.Read(); // consume backtick
+            ArrayList theList = new ArrayList();
+            theList.Add(new Symbol("backquote"));
+            theList.Add(Reader.Read(inStream));
+            return theList;
+        }
+    }
+
+    public class MetaUnQuoteReader : IMetaReader
+    {
+        public object Read(StringReader inStream)
+        {
+            inStream.Read(); // consume comma
+            ArrayList theList = new ArrayList();
+            theList.Add(new Symbol("unquote"));
+            theList.Add(Reader.Read(inStream));
+            return theList;
+        }
+    }
+
     public class MetaCommentReader : IMetaReader
     {
         public object Read(StringReader inStream)
@@ -115,6 +139,8 @@ namespace ls
             MetaReaders['{'] = new MetaMapReader();
             MetaReaders['\''] = new MetaQuoteReader();
             MetaReaders[';'] = new MetaCommentReader();
+            MetaReaders['`'] = new MetaBackQuoteReader();
+            MetaReaders[','] = new MetaUnQuoteReader();
         }
         
         public static object ReadNumber(StringReader inStream)

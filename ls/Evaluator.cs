@@ -66,8 +66,40 @@ namespace ls
                 return theReturn;
             }
 
-            if (inForm is ArrayList)
+            if (IsTaggedList(inForm, "backquote")) // TODO: nested backquotes+unquotes, and unquote-splicing
             {
+                ArrayList theList = (ArrayList)inForm;
+                if (!(theList[1] is ArrayList))
+                { // literal
+                    return theList[1];
+                }
+                else
+                { // process backquote list
+                    ArrayList theBackquoteList = (ArrayList)theList[1];
+                    ArrayList theResultingList = new ArrayList();
+                    foreach (object theObject in theBackquoteList)
+                    {
+                        if (IsTaggedList(theObject, "unquote"))
+                        {
+                            ArrayList theUnquoteList = (ArrayList)theObject;
+                            theResultingList.Add(Eval(theUnquoteList[1], inEnvironment));
+                        }
+                        else
+                        {
+                            theResultingList.Add(theObject);
+                        }
+                    }
+                    return theResultingList;
+                }
+            }
+
+            if (IsTaggedList(inForm, "unquote"))
+            {
+                throw new Exception("Unquote must be inside a backquote");
+            }
+
+            if (inForm is ArrayList)
+            { // Normal procedure application
                 ArrayList theList = (ArrayList)inForm;
                 ArrayList theArgs = new ArrayList();
                 for (int i = 1; i < theList.Count; ++i)

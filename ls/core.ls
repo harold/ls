@@ -44,3 +44,15 @@
   (< (abs (- (square guess) x)) 0.001)))
 
 (define sqrt (fn (x) (sqrt-iter 1.0 x)))
+
+;; Logic
+(define not (fn (b) (if b false true)))
+
+;; Lists
+(define cons  (fn (a b) (if (not b) `(,a) (begin (. b 'Insert 0 a) b))))
+(define first (fn (l) (. l 'get_Item 0)))
+(define rest  (fn (l) (. l 'GetRange 1 (- (. l 'Count) 1))))
+(define map   (fn (f l) (if (= (. l 'Count) 0) null (cons (f (first l)) (map f (rest l))))))
+
+;; Hashtables
+(define assoc (fn (h k v) (begin (. h 'set_Item k v) h)))
