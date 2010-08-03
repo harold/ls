@@ -52,9 +52,10 @@ namespace ls
 
             if (IsTaggedList(inForm, "fn"))
             {
-                ArrayList theList = (ArrayList)inForm;
-                theList[0] = new Symbol("procedure");
-                return theList;
+                ArrayList theReturn = new ArrayList();
+                theReturn.AddRange((ArrayList)inForm);
+                theReturn[0] = new Symbol("procedure");
+                return theReturn;
             }
 
             if (IsTaggedList(inForm, "begin"))
