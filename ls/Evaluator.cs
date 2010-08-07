@@ -67,30 +67,33 @@ namespace ls
                 return theReturn;
             }
 
-            if (IsTaggedList(inForm, "backquote")) // TODO: nested backquotes+unquotes, and unquote-splicing
+            if (IsTaggedList(inForm, "backquote")) // TODO: unquote-splicing and simpler logic here
             {
                 ArrayList theList = (ArrayList)inForm;
-                if (!(theList[1] is ArrayList))
-                { // literal
+                object theBackquotedForm = theList[1];
+                if (!( theBackquotedForm is ArrayList)) // literal
                     return theList[1];
-                }
                 else
                 { // process backquote list
-                    ArrayList theBackquoteList = (ArrayList)theList[1];
-                    ArrayList theResultingList = new ArrayList();
-                    foreach (object theObject in theBackquoteList)
+                    if (IsTaggedList(theBackquotedForm, "backquote")) // directly nested
+                        return Eval(theBackquotedForm, inEnvironment);
+                    else if (IsTaggedList(theBackquotedForm, "unquote")) // directly nested
+                        return Eval(((ArrayList)theBackquotedForm)[1], inEnvironment);
+                    else
                     {
-                        if (IsTaggedList(theObject, "unquote"))
+                        ArrayList theResultingList = new ArrayList();
+                        ArrayList theBackquoteList = (ArrayList)theBackquotedForm;
+                        foreach (object theObject in theBackquoteList)
                         {
-                            ArrayList theUnquoteList = (ArrayList)theObject;
-                            theResultingList.Add(Eval(theUnquoteList[1], inEnvironment));
+                            if (IsTaggedList(theObject, "unquote"))
+                                theResultingList.Add(Eval(((ArrayList)theObject)[1], inEnvironment));
+                            else if (IsTaggedList(theObject, "backquote")) // recurse
+                                theResultingList.Add(Eval(theObject, inEnvironment));
+                            else
+                                theResultingList.Add(theObject); // implicitly quoted
                         }
-                        else
-                        {
-                            theResultingList.Add(theObject);
-                        }
+                        return theResultingList;
                     }
-                    return theResultingList;
                 }
             }
 
