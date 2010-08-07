@@ -24,16 +24,16 @@ namespace ls
 
             while (true)
             {
-                Console.Write("> ");
+                Printer.Out.Write("> ");
                 try
                 {
                     Printer.Print(Evaluator.Eval(Reader.Read(Console.ReadLine()), Environment.Global));
                 }
                 catch(Exception e)
                 {
-                    Console.WriteLine("Oops: " + e.ToString());
+                    Printer.Out.WriteLine("Oops: " + e.ToString());
                 }
-                Console.Write("\n\n");
+                Printer.Out.Write("\n\n");
             }
         }
     }

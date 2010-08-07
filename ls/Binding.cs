@@ -55,7 +55,7 @@ namespace ls
             foreach (object theForm in inList)
             {
                 Printer.Print(theForm);
-                Console.Write("\n");
+                Printer.Out.Write("\n");
             }
 
             return null;

@@ -1,68 +1,76 @@
 ﻿using System;
 using System.Collections;
 using System.Text;
+using System.IO;
 
 namespace ls
 {
     class Printer
     {
+        public static TextWriter Out { get; set; }
+
+        static Printer()
+        {
+            Out = Console.Out;
+        }
+
         public static void Print(object inForm)
         {
             if (inForm is int)
-                Console.Write(inForm);
+                Out.Write(inForm);
 
             else if (inForm is string)
-                Console.Write("\"{0}\"", inForm);
+                Out.Write("\"{0}\"", inForm);
 
             else if (inForm is Symbol)
             {
-                Console.Write(((Symbol)inForm).Name);
+                Out.Write(((Symbol)inForm).Name);
             }
 
             else if (inForm is bool)
             {
                 if ((bool)inForm)
-                    Console.Write("true");
+                    Out.Write("true");
                 else
-                    Console.Write("false");
+                    Out.Write("false");
             }
 
             else if (inForm is ArrayList)
             {
                 ArrayList theList = (ArrayList)inForm;
-                Console.Write("(");
+                Out.Write("(");
                 for (int i = 0; i < theList.Count; ++i)
                 {
                     Print(theList[i]);
                     if (i != theList.Count - 1)
-                        Console.Write(" ");
+                        Out.Write(" ");
                 }
-                Console.Write(")");
+                Out.Write(")");
             }
 
             else if (inForm is Hashtable)
             {
                 Hashtable theMap = (Hashtable)inForm;
-                Console.Write("{");
+                Out.Write("{");
                 int i = 0;
                 foreach (DictionaryEntry theEntry in theMap)
                 {
                     Print(theEntry.Key);
-                    Console.Write(" ");
+                    Out.Write(" ");
                     Print(theEntry.Value);
                     if (i != theMap.Count - 1)
-                        Console.Write(" ");
+                        Out.Write(" ");
 
                     ++i;
                 }
-                Console.Write("}");
+                Out.Write("}");
             }
 
             else if (inForm == null)
-                Console.Write("null");
+                Out.Write("null");
 
             else
-                Console.Write(inForm);
+                Out.Write(inForm);
         }
     }
 }
