@@ -47,6 +47,8 @@
 
 ;; Logic
 (define not (fn (b) (if b false true)))
+(define when   (macro (p e) `(if ,p ,e null)))
+(define unless (macro (p e) `(if ,p null ,e)))
 
 ;; Lists
 (define cons  (fn (a b) (if (not b) `(,a) (begin (. b 'Insert 0 a) b))))
@@ -56,3 +58,7 @@
 
 ;; Hashtables
 (define assoc (fn (h k v) (begin (. h 'set_Item k v) h)))
+
+;; Let
+;; example: (let-one a 1 (+ a 2)) ;==> 3
+(define let-one (macro (name value expression) `(`(fn `(,name) ,expression) ,value)))

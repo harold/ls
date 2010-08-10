@@ -58,6 +58,14 @@ namespace ls
                 return theReturn;
             }
 
+            if (IsTaggedList(inForm, "macro"))
+            {
+                ArrayList theReturn = new ArrayList();
+                theReturn.AddRange((ArrayList)inForm);
+                theReturn[0] = new Symbol("macro-procedure");
+                return theReturn;
+            }
+
             if (IsTaggedList(inForm, "begin"))
             {
                 ArrayList theList = (ArrayList)inForm;
@@ -103,13 +111,9 @@ namespace ls
             }
 
             if (inForm is ArrayList)
-            { // Normal procedure application
+            { // application
                 ArrayList theList = (ArrayList)inForm;
-                ArrayList theArgs = new ArrayList();
-                for (int i = 1; i < theList.Count; ++i)
-                {
-                    theArgs.Add(Eval(theList[i], inEnvironment));
-                }
+                ArrayList theArgs = theList.GetRange(1, theList.Count-1);
                 if (theList.Count == 0) throw new Exception("You can't call the empty list");
                 return Apply(Eval(theList[0], inEnvironment), theArgs, inEnvironment);
             }
@@ -119,14 +123,8 @@ namespace ls
 
         private static object Apply(object inForm, ArrayList inArgs, Environment inEnvironment)
         {
-            if (inForm is Hashtable)
-                return ((Hashtable)inForm)[inArgs[0]];
-
-            if (inForm is MetaFunction)
-                return ((MetaFunction)inForm)(inArgs, inEnvironment);
-
-            if (IsTaggedList(inForm, "procedure"))
-            {
+            if (IsTaggedList(inForm, "macro-procedure"))
+            { // macro expansion/evaluation
                 ArrayList theList = (ArrayList)inForm;
                 Environment theExtendedEnvironment = new Environment();
                 theExtendedEnvironment.Extend(inEnvironment);
@@ -137,6 +135,35 @@ namespace ls
                     // Make sure to only copy over the arguments that were supplied
                     if (i < inArgs.Count)
                         theExtendedEnvironment[((Symbol)theNamedArguments[i]).Name] = inArgs[i];
+                    else
+                        theExtendedEnvironment[((Symbol)theNamedArguments[i]).Name] = null;
+                }
+                return Eval(Eval(theList[2], theExtendedEnvironment), inEnvironment);
+            }
+
+            // Evaluate arguments
+            ArrayList theEvaluatedArguments = new ArrayList();
+            for (int i = 0; i < inArgs.Count; ++i)
+                theEvaluatedArguments.Add(Eval(inArgs[i], inEnvironment));
+
+            if (inForm is Hashtable)
+                return ((Hashtable)inForm)[theEvaluatedArguments[0]];
+
+            if (inForm is MetaFunction)
+                return ((MetaFunction)inForm)(theEvaluatedArguments, inEnvironment);
+
+            if (IsTaggedList(inForm, "procedure"))
+            { // normal procedure application
+                ArrayList theList = (ArrayList)inForm;
+                Environment theExtendedEnvironment = new Environment();
+                theExtendedEnvironment.Extend(inEnvironment);
+
+                ArrayList theNamedArguments = (ArrayList)theList[1];
+                for (int i = 0; i < theNamedArguments.Count; ++i)
+                {
+                    // Make sure to only copy over the arguments that were supplied
+                    if (i < theEvaluatedArguments.Count)
+                        theExtendedEnvironment[((Symbol)theNamedArguments[i]).Name] = theEvaluatedArguments[i];
                     else
                         theExtendedEnvironment[((Symbol)theNamedArguments[i]).Name] = null;
                 }
