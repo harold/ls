@@ -51,14 +51,20 @@
 (define unless (macro (p e) `(if ,p null ,e)))
 
 ;; Lists
-(define cons  (fn (a b) (if (not b) `(,a) (begin (. b 'Insert 0 a) b))))
-(define first (fn (l) (. l 'get_Item 0)))
-(define rest  (fn (l) (. l 'GetRange 1 (- (. l 'Count) 1))))
-(define map   (fn (f l) (if (= (. l 'Count) 0) null (cons (f (first l)) (map f (rest l))))))
+(define count  (fn (l) (. l 'Count)))
+(define cons   (fn (a b) (if (not b) `(,a) (begin (. b 'Insert 0 a) b))))
+(define first  (fn (l) (. l 'get_Item 0)))
+(define rest   (fn (l) (. l 'GetRange 1 (- (count l) 1))))
+(define second (fn (l) (first (rest l))))
+(define take   (fn (n l) (. l 'GetRange 0 n)))
+(define drop   (fn (n l) (. l 'GetRange n (- (count l) n))))
+(define map    (fn (f l) (if (= (count l) 0) null (cons (f (first l)) (map f (rest l))))))
 
 ;; Hashtables
 (define assoc (fn (h k v) (begin (. h 'set_Item k v) h)))
 
 ;; Let
 ;; example: (let-one a 1 (+ a 2)) ;==> 3
+;; example: (let (a 1 b (+ 1 a)) (+ a b)) ;==> 3
 (define let-one (macro (name value expression) `(`(fn `(,name) ,expression) ,value)))
+(define let (macro (l e) `(let-one ,(first l) ,(second l) ,(if (= (count l) 2) e `(let ,(drop 2 l) ,e)))))
