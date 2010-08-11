@@ -5,7 +5,7 @@ using System.Reflection.Emit;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace ls
+namespace libls
 {
     // Wraps meta functions
     public delegate object MetaFunction(ArrayList inList, Environment inEnvironment);
@@ -13,7 +13,7 @@ namespace ls
     // Wraps anonymous methods for invoking bindings on another thread
     public delegate object MetaInvoker();
 
-    class Binding
+    public class Binding
     {
         public static void PopulateEnvironment(Environment inEnvironment)
         {

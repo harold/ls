@@ -1,5 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using libls;
 
 namespace ls
 {
@@ -7,18 +7,17 @@ namespace ls
     {
         static void Main(string[] args)
         {
-            Environment.Global = new Environment();
-            Environment.Global.Init();
-            Binding.PopulateEnvironment(Environment.Global);
+            Environment theEnvironment = Environment.Global;
+            Binding.PopulateEnvironment(theEnvironment);
 
             string[] theDefaultFiles = { "core.ls", "main.ls" };
             foreach(string theFile in theDefaultFiles )
             {
-                if (System.IO.File.Exists(theFile))
+                if (File.Exists(theFile))
                 {
-                    StringReader sr = new StringReader(System.IO.File.ReadAllText(theFile));
+                    StringReader sr = new StringReader(File.ReadAllText(theFile));
                     while (sr.Peek() != -1)
-                        Evaluator.Eval(Reader.Read(sr), Environment.Global);
+                        Evaluator.Eval(Reader.Read(sr), theEnvironment);
                 }
             }
 
@@ -27,9 +26,9 @@ namespace ls
                 Printer.Out.Write("> ");
                 try
                 {
-                    Printer.Print(Evaluator.Eval(Reader.Read(Console.ReadLine()), Environment.Global));
+                    Printer.Print(Evaluator.Eval(Reader.Read(System.Console.ReadLine()), theEnvironment));
                 }
-                catch(Exception e)
+                catch(System.Exception e)
                 {
                     Printer.Out.WriteLine("Oops: " + e.ToString());
                 }

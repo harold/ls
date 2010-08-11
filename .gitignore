@@ -2,3 +2,5 @@
 *.user
 ls/bin
 ls/obj
+libls/bin
+libls/obj

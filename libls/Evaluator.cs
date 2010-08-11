@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-using ls;
-
-namespace ls
+namespace libls
 {
     public static class Evaluator
     {

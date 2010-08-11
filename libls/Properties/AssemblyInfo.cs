@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ls")]
+[assembly: AssemblyTitle("libls")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("ls")]
+[assembly: AssemblyProduct("libls")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("2bbc7963-b283-411b-8e75-6c10a1cf33df")]
+[assembly: Guid("74a3eed6-8018-4fd9-a7bc-33833335c775")]
 
 // Version information for an assembly consists of the following four values:
 //
